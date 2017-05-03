@@ -1,10 +1,11 @@
 #!/bin/bash
 
+defPath="/home/noah/Projects/shell/timer"
 defCmd="cvlc"
 cmd=$defCmd
-defAlarm="/home/noah/Music/alarm.mp3"
+defAlarm="$defPath/alarm.mp3"
 alarm=$defAlarm
-helpFile="/home/noah/Projects/shell/timer/help.txt"
+helpFile="$defPath/help.txt"
 Opts=("$@")
 format="m.s"
 outFormat=

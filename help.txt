@@ -6,7 +6,8 @@ OPTIONS:
 		show this help menu
 
 	-t TIME
-		In TIME execute alarm
+		execute alarm (or custom command with -C) after TIME
+		TIME has the format defined with -f
 
 	-f FORMAT
 		read TIME as FORMAT
@@ -16,10 +17,8 @@ OPTIONS:
 				s - second
 				m - minute
 				h - hour
-				(D - day
-				M - month
-				(Y - year))
-			SEP can be any character, seperating the TYPEs
+			SEP can be any character that is not reserved for TYPEs
+			SEP seperates the types
 			SEP is optional
 		default:
 			-f m.s
@@ -29,7 +28,7 @@ OPTIONS:
 			-f m-s.m
 
 	-o FORMAT
-		output in FORMAT
+		output remaining time in FORMAT
 		if ommited uses -f FORMAT
 
 	-w SECONDS
