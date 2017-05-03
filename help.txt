@@ -1,0 +1,46 @@
+
+timer	[OPTIONS]
+
+OPTIONS:
+	-h --help
+		show this help menu
+
+	-t TIME
+		In TIME execute alarm
+
+	-f FORMAT
+		read TIME as FORMAT
+		FORMAT options:
+		TYPE SEP TYPE
+			TYPE is one of:
+				s - second
+				m - minute
+				h - hour
+				(D - day
+				M - month
+				(Y - year))
+			SEP can be any character, seperating the TYPEs
+			SEP is optional
+		default:
+			-f m.s
+		examples:
+			-f h:m:s
+			-f h.m
+			-f m-s.m
+
+	-o FORMAT
+		output in FORMAT
+		if ommited uses -f FORMAT
+
+	-w SECONDS
+		seconds to sleep before updating alarm
+
+	-C COMMAND
+		execute custom command when timer finishes
+		if ommited plays audio with cvlc
+		when given will ignore alarm and -A
+
+	-A PATH-TO-AUDIO-FILE
+		plays custom audio file
+		if ommited plays default: /home/noah/Music/alarm.mp3
+
