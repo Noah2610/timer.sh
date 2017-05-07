@@ -13,6 +13,7 @@ time=0
 timeSec=0
 execTimer=true
 sleepDur=1
+milli=
 
 if [ $# -gt 0 ]; then
 
@@ -48,6 +49,8 @@ if [ $# -gt 0 ]; then
 					echo "$val is not a file, using default alarm ($defAlarm)"
 					read -n1
 				fi
+			elif [[ ${opt:1:1} == "m" ]]; then  # display milliseconds
+				milli=$val
 			fi
 		fi
 	done
@@ -92,7 +95,7 @@ if [ $# -gt 0 ]; then
 	if [ $execTimer ]; then
 		startTime=$(date +%s)
 		endTime=$(echo "$startTime + $timeSec" | bc)
-		for (( count = 0; count < $timeSec; count++ )); do
+		while [ $(date +%s) -lt $endTime ]; do
 			clear
 
 			# calculate times
@@ -132,6 +135,9 @@ if [ $# -gt 0 ]; then
 
 			if [[ "$outFormat" != *"s"* ]]; then
 				echo -n ".$sec s"
+			fi
+			if [[ $milli != "" ]]; then
+				echo -n " ,$(date +%N | cut -c1-$milli) ms"
 			fi
 
 			sleep $sleepDur;

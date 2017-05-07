@@ -43,3 +43,6 @@ OPTIONS:
 		plays custom audio file
 		if ommited plays default: /home/noah/Music/alarm.mp3
 
+	-m DIGITS (from nanoseconds)
+		display milliseconds, from nanoseconds with 4 digits
+
