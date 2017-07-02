@@ -14,6 +14,8 @@ timeSec=0
 execTimer=true
 sleepDur=1
 milli=
+defOutput="/dev/stdout"
+output="$defOutput"
 
 if [ $# -gt 0 ]; then
 
@@ -51,6 +53,8 @@ if [ $# -gt 0 ]; then
 				fi
 			elif [[ ${opt:1:1} == "m" ]]; then  # display milliseconds
 				milli=$val
+			elif [[ ${opt:1:1} == "O" ]]; then  # display milliseconds
+				output=$val
 			fi
 		fi
 	done
@@ -58,6 +62,7 @@ if [ $# -gt 0 ]; then
 	# use format as output if no ouput format given
 	if [ -z "$outFormat" ]; then
 		outFormat=$format
+		#outFormat="%m:%s"
 	fi
 
 	# create timer with options
@@ -89,14 +94,13 @@ if [ $# -gt 0 ]; then
 		esac
 	done
 
-	echo $timeSec
-
 	# execute timer
 	if [ $execTimer ]; then
 		startTime=$(date +%s)
 		endTime=$(echo "$startTime + $timeSec" | bc)
 		while [ $(date +%s) -lt $endTime ]; do
-			clear
+			echo -n "" > $output
+			if [ "$output" == "$defOutput" ]; then clear; fi
 
 			# calculate times
 			remSec=$(echo "$endTime - $(date +%s)" | bc)
@@ -115,40 +119,50 @@ if [ $# -gt 0 ]; then
 			# necessary to print remaining time in $outFormat
 			for (( countF = 0; countF < ${#outFormat}; countF++ )); do
 				cur=${outFormat:$countF:1}
-				case "$cur" in
-					"s")
-						if [[ ${#sec} -lt 2 ]]; then echo -n "0"; fi
-						echo -n "$sec"
-						;;
-					"m")
-						if [[ ${#min} -lt 2 ]]; then echo -n "0"; fi
-						echo -n "$min"
-						;;
-					"h")
-						if [[ ${#hour} -lt 2 ]]; then echo -n "0"; fi
-						echo -n "$hour"
-						;;
-					*)
-						echo -n "$cur"
-				esac
+				if [[ "$format" == "$outFormat" || "$cur" == "%" ]]; then
+					caseCur=
+					if [ "$cur" == "%" ]; then
+						caseCur="${outFormat:$countF+1:1}"
+					else
+						caseCur="$cur"
+					fi
+					case "$caseCur" in
+						"s")
+							if [[ ${#sec} -lt 2 ]]; then echo -n "0" >> $output; fi
+							echo -n "$sec" >> $output
+							;;
+						"m")
+							if [[ ${#min} -lt 2 ]]; then echo -n "0" >> $output; fi
+							echo -n "$min" >> $output
+							;;
+						"h")
+							if [[ ${#hour} -lt 2 ]]; then echo -n "0" >> $output; fi
+							echo -n "$hour" >> $output
+							;;
+						*)
+							echo -n "$cur" >> $output
+					esac
+				elif [[ "${outFormat:$countF-1:1}" != "%" ]]; then
+					echo -n "$cur" >> $output
+				fi
 			done
 
 			if [[ "$outFormat" != *"s"* ]]; then
-				echo -n ".$sec s"
+				echo -n ".$sec s" >> $output
 			fi
 			if [[ $milli != "" ]]; then
-				echo -n " ,$(date +%N | cut -c1-$milli) ms"
+				echo -n " ,$(date +%N | cut -c1-$milli) ms" >> $output
 			fi
 
-			sleep $sleepDur;
+			sleep $sleepDur
 		done
 
-		clear
-		echo "Time's Up!"
+		if [ "$output" == "$defOutput" ]; then clear; fi
 		if [ "$cmd" == "$defCmd" ]; then
+			echo "Time's Up!" > $output
 			$cmd "$alarm"
 		else
-			bash -c "$cmd"
+			bash -c "$cmd" >> $output
 		fi
 	fi
 fi

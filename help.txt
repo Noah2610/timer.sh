@@ -30,6 +30,11 @@ OPTIONS:
 	-o FORMAT
 		output remaining time in FORMAT
 		if ommited uses -f FORMAT
+		formats are same as with -f except a "%" is required before format type
+		examples:
+			-o %h:%m:%s
+			-o "Timer: %m:%s"
+		this is useful when you want flavor text in your output (like in example)
 
 	-w SECONDS
 		seconds to sleep before updating alarm
@@ -44,5 +49,9 @@ OPTIONS:
 		if ommited plays default: /home/noah/Music/alarm.mp3
 
 	-m DIGITS (from nanoseconds)
-		display milliseconds, from nanoseconds with 4 digits
+		output milliseconds, from nanoseconds with 4 digits
+
+	-O PATH
+		output remaining time into PATH instead of stdout
+		useful in combination with custom scripts
 
