@@ -16,6 +16,12 @@ sleepDur=1
 milli=
 defOutput="/dev/stdout"
 output="$defOutput"
+i3statusPath="/home/noah/.bar_output"
+i3statusOutput=
+i3statusFormat="Timer: %m:%s"
+i3icons=( "" "" )
+i3iconCurFront=0
+i3iconCurBack=1
 
 if [ $# -gt 0 ]; then
 
@@ -53,17 +59,29 @@ if [ $# -gt 0 ]; then
 				fi
 			elif [[ ${opt:1:1} == "m" ]]; then  # display milliseconds
 				milli=$val
-			elif [[ ${opt:1:1} == "O" ]]; then  # display milliseconds
+			elif [[ ${opt:1:1} == "O" ]]; then  # set output path
 				output=$val
+			elif [[ ${opt:1:1} == "B" ]]; then
+				i3statusOutput=true
+				output="$i3statusPath"
 			fi
 		fi
 	done
 
-	# use format as output if no ouput format given
+
 	if [ -z "$outFormat" ]; then
-		outFormat=$format
-		#outFormat="%m:%s"
+		# set output format for timer in i3status if no custom format is set
+		if [ -n "$i3statusOutput" ]; then
+			outFormat="$i3statusFormat"
+
+		else
+			# else use format as output
+			outFormat=$format
+			#outFormat="%m:%s"
+		fi
+
 	fi
+
 
 	# create timer with options
 	# compare $time with $format
@@ -101,6 +119,15 @@ if [ $# -gt 0 ]; then
 		while [ $(date +%s) -lt $endTime ]; do
 			echo -n "" > $output
 			if [ "$output" == "$defOutput" ]; then clear; fi
+
+			# echo fontawesome icons in output to i3status
+			if [ -n "$i3statusOutput" ]; then
+				echo -n "${i3icons[$i3iconCurFront]} " >> $output
+				i3iconCurFront=$( echo "$i3iconCurFront + 1" | bc )
+				if [ $i3iconCurFront -gt 1 ]; then
+					i3iconCurFront=0
+				fi
+			fi
 
 			# calculate times
 			remSec=$(echo "$endTime - $(date +%s)" | bc)
@@ -154,6 +181,15 @@ if [ $# -gt 0 ]; then
 				echo -n " ,$(date +%N | cut -c1-$milli) ms" >> $output
 			fi
 
+			# echo fontawesome icons in output to i3status
+			if [ -n "$i3statusOutput" ]; then
+				echo -n " ${i3icons[$i3iconCurBack]}" >> $output
+				i3iconCurBack=$( echo "$i3iconCurBack + 1" | bc )
+				if [ $i3iconCurBack -gt 1 ]; then
+					i3iconCurBack=0
+				fi
+			fi
+
 			sleep $sleepDur
 		done
 
@@ -161,6 +197,7 @@ if [ $# -gt 0 ]; then
 		if [ "$cmd" == "$defCmd" ]; then
 			echo "Time's Up!" > $output
 			$cmd "$alarm"
+			echo -n "" > $output
 		else
 			bash -c "$cmd" >> $output
 		fi

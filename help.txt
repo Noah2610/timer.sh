@@ -55,3 +55,7 @@ OPTIONS:
 		output remaining time into PATH instead of stdout
 		useful in combination with custom scripts
 
+	-B
+		output into i3status bar
+		( $HOME/.bar_output )
+
