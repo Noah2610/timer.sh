@@ -55,7 +55,21 @@ OPTIONS:
 		output remaining time into PATH instead of stdout
 		useful in combination with custom scripts
 
+	-b
+		start program in background
+		a window will pop-up when timer has finished
+		(-P)
+
 	-B
-		output into i3status bar
+		start in background and output into i3status bar
 		( $HOME/.bar_output )
+		a window will pop-up when timer has finished
+		basically an alias for:
+			-b -P -o "Timer: %m:%s" -O $HOME/.bar_output
+		options given by the user will override the default -B options
+
+	-P
+		when timer finishes a terminal window will pop-up
+		(in floating mode with i3)
+
 
