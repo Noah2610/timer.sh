@@ -25,7 +25,7 @@ i3iconCurBack=1
 newOpts=
 bgOutputPath="/home/noah/.remaining_time"
 bgSetOutput=
-popoutCmd="gnome-terminal --role TIMER -x bash -c echo\ Time\"\'\"s\ Up!\;\ \"$cmd\"\ \"$alarm\""
+popoutCmd="gnome-terminal --role FLOAT -x bash -c echo\ Time\"\'\"s\ Up!\;\ \"$cmd\"\ \"$alarm\""
 inBg=
 
 
@@ -110,10 +110,10 @@ if [ $# -gt 0 ]; then
 		done
 		extraOpts=
 		if [ -n "$i3statusOutput" ]; then
-			extraOpts=("-O" "$i3statusPath" "-P")
+			extraOpts=("-O" "$i3statusPath")
 		fi
 		# restart script
-		${defPath}/timer.sh "${finalOpts[@]}" "${extraOpts[@]}" &
+		${defPath}/timer.sh "${finalOpts[@]}" "${extraOpts[@]}" "-P" &
 		exit
 	fi
 
