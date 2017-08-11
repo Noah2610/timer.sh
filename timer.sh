@@ -18,7 +18,8 @@ defOutput="/dev/stdout"
 output="$defOutput"
 i3statusPath="/home/noah/.bar_output"
 i3statusOutput=
-i3statusFormat="Timer: %m:%s"
+#i3statusFormat="Timer: %m:%s"
+i3statusFormat="%m:%s"
 i3icons=( "" "" )
 i3iconCurFront=0
 i3iconCurBack=1
@@ -248,6 +249,6 @@ if [ $# -gt 0 ]; then
 		else
 			bash -c "$cmd" >> $output
 		fi
-		#echo -n "" > $output
+		echo -n "" > $output
 	fi
 fi
