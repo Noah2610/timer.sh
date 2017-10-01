@@ -26,7 +26,8 @@ i3iconCurBack=1
 newOpts=
 bgOutputPath="/home/noah/.remaining_time"
 bgSetOutput=
-popoutCmd="gnome-terminal --role FLOAT -x bash -c echo\ Time\"\'\"s\ Up!\;\ \"$cmd\"\ \"$alarm\""
+#popoutCmd="termite --role FLOAT -e 'bash -c \'echo\ Time\"\'\"s\ Up!\;\ \"$cmd\"\ \"$alarm\"\'"
+popoutCmd="termite --role FLOAT -e \"bash -c 'echo Time´s Up!; $cmd $alarm'\""
 inBg=
 
 
