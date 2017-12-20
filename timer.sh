@@ -1,6 +1,6 @@
 #!/bin/bash
 
-defPath="/home/noah/Projects/shell/timer"
+defPath="/home/noah/Projects/Bash/timer"
 defCmd="cvlc --play-and-exit -q"
 cmd="$defCmd"
 defAlarm="$defPath/alarm.mp3"
