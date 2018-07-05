@@ -1,6 +1,6 @@
 #!/bin/bash
 
-defPath="/home/noah/Projects/Bash/timer"
+defPath="$HOME/Projects/Bash/timer"
 defCmd="cvlc --play-and-exit -q"
 cmd="$defCmd"
 defAlarm="$defPath/alarm.mp3"
@@ -27,9 +27,15 @@ newOpts=
 bgOutputPath="/home/noah/.remaining_time"
 bgSetOutput=
 #popoutCmd="termite --role FLOAT -e 'bash -c \'echo\ Time\"\'\"s\ Up!\;\ \"$cmd\"\ \"$alarm\"\'"
-popoutCmd="termite --role FLOAT -e \"bash -c 'echo Time´s Up!; $cmd $alarm'\""
+popoutCmd="termite --role FLOAT -e \"bash -c 'echo Time´s Up!; $cmd $alarm &> /dev/null'\""
 inBg=
+i3blocksSignal=2
 
+function updatei3blocks {
+	if which i3blocks &> /dev/null && pidof i3blocks &> /dev/null; then
+		pkill -RTMIN+$i3blocksSignal i3blocks
+	fi
+}
 
 if [ $# -gt 0 ]; then
 
@@ -240,8 +246,12 @@ if [ $# -gt 0 ]; then
 				fi
 			fi
 
+			updatei3blocks
+
 			sleep $sleepDur
 		done
+
+		updatei3blocks
 
 		if [ "$output" == "$defOutput" ]; then clear; fi
 		echo "Time's Up! ($time)" > $output
